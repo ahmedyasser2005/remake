@@ -2,7 +2,6 @@
 
 Player::Player() : 
 	name("Player"),
-	state(new IdleState()),
 	isIdle(true), isWalking(false), isRunning(false), isReviving(false),
 	isDown(false), isDead(false),
 	cash(0), // uint16_t max value 65,535
@@ -11,7 +10,6 @@ Player::Player() :
 {}
 
 Player::~Player() {
-	delete state;
 }
 
 void Player::Update(sf::RenderWindow* window) {
@@ -39,6 +37,5 @@ void Player::Down(float timeToDie) {
 
 void Player::Move() {
 
-	body.move();
 
 }

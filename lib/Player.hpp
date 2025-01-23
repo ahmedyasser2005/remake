@@ -1,14 +1,13 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-#include "../Linker.hpp"
+#include "Linker.hpp"
 
-class Player : /*public MovementsComponent,*/ public HealthComponent {
+class Player : public MovementsComponent, public HealthComponent {
 private:
 
 	std::string name;
 	sf::Sprite body;
-	State* state;
 
 	bool isIdle, isWalking, isRunning, isReviving;
 	bool isDown, isDead;
@@ -24,6 +23,7 @@ public:
 	~Player();
 
 	//void LoadPlayerData();
+	
 	void Update(sf::RenderWindow*);
 	
 	void Down(float);

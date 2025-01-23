@@ -2,9 +2,8 @@
 
 int main() {
 
-
     Game MadeByAhmedYasser;
     MadeByAhmedYasser.Run();
 
-
+    return 0;
 }

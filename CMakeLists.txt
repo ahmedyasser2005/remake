@@ -19,14 +19,6 @@ add_executable(
     
     "src/HealthComponent.cpp"
     "src/MovementsComponent.cpp"
-    
-    "src/State.cpp"
-    
-    "src/States/GameStates.cpp"
-    "src/States/PlayerStatesStates.cpp"
-
-    "src/States/GameStateController.cpp"
-    "src/States/PlayerStateController.cpp"
 
     "src/Player.cpp"
 

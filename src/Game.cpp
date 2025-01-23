@@ -17,8 +17,8 @@ void Game::InitWindow() {
 }
 
 void Game::DeltaTimeUpdate() {
-    std::cout << deltaTime << std::endl;
-    deltaTime = sf::Clock::restart();
+    float dt = deltaTime.restart().asSeconds();
+    std::cout << dt << std::endl;
 }
 
 void Game::EventHandler() {
@@ -26,7 +26,6 @@ void Game::EventHandler() {
 
         if (event->is<sf::Event::Closed>())
             window->close();
-
         
 
 
@@ -40,6 +39,8 @@ void Game::Update() {
     EventHandler();
 
     window->clear();
+
+
     window->display();
 
 }

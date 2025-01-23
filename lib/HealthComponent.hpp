@@ -11,7 +11,7 @@ private:
 
 public:
 
-	HealthComponent(uint16_t maxHealth = 100) : currentHealth(maxHealth), isDead(false) {
+	HealthComponent(uint16_t maxHealth = 100) : currentHealth(maxHealth) {
 		if (maxHealth > 500 || maxHealth < 1)
 			throw std::out_of_range("Error!, Max Health must be in between '1' to '500'");
 	}

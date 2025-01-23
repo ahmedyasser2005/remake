@@ -7,8 +7,7 @@ class Game {
 private:
 	
 	sf::RenderWindow* window;
-	GameStateController stateController;
-	float deltaTime;
+	sf::Clock deltaTime;
 
 
 public:

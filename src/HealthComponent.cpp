@@ -6,7 +6,7 @@ void HealthComponent::Damage(const uint16_t amount) {
 
 	else if (amount >= currentHealth) {
 		currentHealth = 0;
-		Kill();
+		Down();
 	}
 
 	else
