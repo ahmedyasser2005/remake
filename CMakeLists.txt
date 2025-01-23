@@ -12,6 +12,24 @@ FetchContent_Declare(SFML
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(main src/main.cpp)
+add_executable(
+    main src/main.cpp "src/main.cpp"
+
+    "src/Game.cpp"
+    
+    "src/HealthComponent.cpp"
+    "src/MovementsComponent.cpp"
+    
+    "src/State.cpp"
+    
+    "src/States/GameStates.cpp"
+    "src/States/PlayerStatesStates.cpp"
+
+    "src/States/GameStateController.cpp"
+    "src/States/PlayerStateController.cpp"
+
+    "src/Player.cpp"
+
+ )
 target_compile_features(main PRIVATE cxx_std_17)
 target_link_libraries(main PRIVATE SFML::Graphics)
