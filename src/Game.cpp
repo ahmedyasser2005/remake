@@ -12,8 +12,8 @@ Game::Game(): m_Window(nullptr), m_ShowSpeed(nullptr) {
 
 
 Game::~Game() {
-    //delete this->m_Player;
-    //delete this->m_Window;
+    delete this->m_ShowSpeed;
+    delete this->m_Window;
 }
 
 
@@ -143,6 +143,7 @@ void Game::Update() {
     this->EventHandler();
 
     this->m_Player.Update(m_DeltaTime);
+
     m_ShowSpeed->setString(std::to_string(m_Player.GetSpeed()));
 
     this->m_Window->clear();
