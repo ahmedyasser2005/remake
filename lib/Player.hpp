@@ -1,35 +1,58 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-#include "Linker.hpp"
+#include "Entity.hpp"
 
-class Player : public MovementsComponent, public HealthComponent {
+class Player : private Entity {
 private:
 
-	std::string name;
-	sf::Sprite body;
+	/*
+		std::string		m_Name;
+		uint16_t		m_CurrentHealth;
+		const uint16_t	m_MaxHealth;
 
-	bool isIdle, isWalking, isRunning, isReviving;
-	bool isDown, isDead;
-	//bool isShooting, isReloading;
+		Entity(std::string name);
+	*/
 
-	uint16_t cash; // uint16_t max value 65,535
-	uint16_t level, xp;
-	uint16_t stamina;
-	
+	sf::RectangleShape m_Character;
+
+	float m_WalkingVelocity;
+	float m_RunningVelocity;
+	const float m_Acceleration;
+	float m_CurrentXVelocity;
+	float m_CurrentYVelocity;
+	uint16_t m_Stamina;
+
 public:
+	
+	bool m_isMovingUp;
+	bool m_isMovingLeft;
+	bool m_isMovingDown;
+	bool m_isMovingRight;
 
+	bool m_isIdle;
+	bool m_isRunning;
+	
 	Player();
 	~Player();
 
-	//void LoadPlayerData();
-	
-	void Update(sf::RenderWindow*);
-	
-	void Down(float);
+	void Init();
 
-	void Move();
-	void Do();
+	/*
+		updates the player's position based on movement inputs and speed
+		which varies depending on whether the player is running or walking
+		and takes a time delta parameter to ensure smooth movement for everyone.
+	*/
+	void Update(const float& dt) override;
+
+	//void Idle() override;
+	//void Walk() override;
+	//void Run() override;
+	//void Die() override;
+
+	const float& GetSpeed() const;
+
+	void Render(sf::RenderWindow* window);
 
 };
 

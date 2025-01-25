@@ -1,14 +1,20 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include "Linker.hpp"
+#include "Player.hpp"
 
 class Game {
 private:
 	
-	sf::RenderWindow* window;
-	sf::Clock deltaTime;
+	sf::RenderWindow* m_Window;
+	sf::Text* m_ShowSpeed;
+	
+	Player m_Player;
+	
 
+
+	sf::Clock m_Clock;
+	float m_DeltaTime;
 
 public:
 	
@@ -16,9 +22,11 @@ public:
 	~Game();
 
 	void InitWindow();
+
 	void DeltaTimeUpdate();
 	void EventHandler();
 	void Update();
+	void Render();
 	void Run();
 
 };
