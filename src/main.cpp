@@ -1,9 +1,7 @@
 #include "../lib/Game.hpp"
 
 int main() {
-
-    Game MadeByAhmedYasser;
-    MadeByAhmedYasser.Run();
-
+    Game game;
+    game.Run();
     return 0;
 }
