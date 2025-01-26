@@ -1,163 +1,60 @@
-#include "../lib/Game.hpp"
+class Game {
+private:
+  sf::RenderWindow window;     // SFML window object
+  sf::Texture playerTexture;   // Texture for the player sprite
+  Player player;               // Player instance
 
-const std::filesystem::path FONT_PATH = "C:\\Users\\ahmed\\OneDrive\\Desktop\\Zombie Escape CO-OP Indie Game\\assets\\fonts\\calibri.ttf";
-const sf::Font FONT(FONT_PATH);
+public:
+  void Run() {
+    window.create(sf::VideoMode(1280, 720), "Shooter Game"); // Create window
+    window.setFramerateLimit(60); // Cap at 60 FPS
 
-Game::Game(): m_Window(nullptr), m_ShowSpeed(nullptr) {
-	this->InitWindow();
-    m_ShowSpeed = new sf::Text(FONT);
-    m_ShowSpeed->setPosition({ static_cast<float>(this->m_Window->getSize().x) / 2.f, 0.f });
-}
-
-
-
-Game::~Game() {
-    delete this->m_ShowSpeed;
-    delete this->m_Window;
-}
-
-
-
-/*
-    Initilizing game window settings such as dimentions, max framerate, vsync on off...
-*/
-void Game::InitWindow() {
-
-    std::string key;
-    uint16_t framerate = 144;
-    bool vSyncEnable = false;
-    sf::Vector2u WindowSize = { 1920, 1080 };
-
-    std::ifstream file("../config/m_Window.ini");
-    if (file.is_open()) {
-        while (!file.eof()) {
-            file >> key;
-
-            if (key == "WIDTH_HEIGHT") {
-                file >> WindowSize.x;
-                file >> WindowSize.y;
-            }
-            else if (key == "MAX_FRAMERATE")
-                file >> framerate;
-            else if (key == "ENABLE_VSYNC")
-                file >> vSyncEnable;
-        }
+    // Load player texture
+    if (!playerTexture.loadFromFile("player.png")) {
+      std::cerr << "Error: Missing player.png!\n"; // Error handling
+      return;
     }
 
-    this->m_Window = new sf::RenderWindow(sf::VideoMode(WindowSize), "Zombie Escape CO-OP Indie Game");
+    player.Initialize(playerTexture, sf::Vector2f(640, 360)); // Initialize player
 
-    this->m_Window->setFramerateLimit(framerate);
-    this->m_Window->setVerticalSyncEnabled(vSyncEnable);
-
-}
-
-
-/*
-    Delta time is the time taken to transition from one frame to the next one.
-    When it comes to movements and speed etc.
-    you have to multiply deltaTime with the speed.
-
-    High FPS -> Low DeltaTime
-    Low FPS -> High DeltaTime
-*/
-void Game::DeltaTimeUpdate() {
-    this->m_DeltaTime = this->m_Clock.restart().asSeconds();
-    std::cout << this->m_DeltaTime << std::endl;
-}
-
-
-
-/*
-    Catches events.
-*/
-void Game::EventHandler() {
-    while (const std::optional event = this->m_Window->pollEvent()) {
-
-        if (event->is<sf::Event::Closed>())
-            this->m_Window->close();
-
-        if (auto key = event->getIf<sf::Event::KeyPressed>()) {
-            switch (key->scancode) {
-            case (sf::Keyboard::Scancode::W):
-                this->m_Player.m_isMovingUp = true;
-                break;
-
-            case (sf::Keyboard::Scancode::A):
-                this->m_Player.m_isMovingLeft = true;
-                break;
-
-            case (sf::Keyboard::Scancode::S):
-                this->m_Player.m_isMovingDown = true;
-                break;
-
-            case (sf::Keyboard::Scancode::D):
-                this->m_Player.m_isMovingRight = true;
-                break;
-            case (sf::Keyboard::Scancode::LShift):
-                this->m_Player.m_isRunning = true;
-                break;
-            }
-        }
-
-        if (auto key = event->getIf<sf::Event::KeyReleased>()) {
-            switch (key->scancode) {
-            case (sf::Keyboard::Scancode::W):
-                this->m_Player.m_isMovingUp = false;
-                break;
-
-            case (sf::Keyboard::Scancode::A):
-                this->m_Player.m_isMovingLeft = false;
-                break;
-
-            case (sf::Keyboard::Scancode::S):
-                this->m_Player.m_isMovingDown = false;
-                break;
-
-            case (sf::Keyboard::Scancode::D):
-                this->m_Player.m_isMovingRight = false;
-                break;
-            case (sf::Keyboard::Scancode::LShift):
-                this->m_Player.m_isRunning = false;
-                break;
-            }
-        }
-
+    sf::Clock clock; // Game clock
+    while (window.isOpen()) { // Main game loop
+      sf::Time dt = clock.restart(); // Calculate delta time
+      ProcessInput();  // Handle events (e.g., window close)
+      Update(dt);      // Update game state (player movement)
+      Render();        // Draw everything
     }
-}
+  }
 
+private:
+  void ProcessInput() {
+    sf::Event event;
+    while (window.pollEvent(event)) {
+      if (event.type == sf::Event::Closed)
+        window.close(); // Close window when user clicks X
+    }
+  }
 
-void Game::Render() {
-    this->m_Player.Render(this->m_Window);
-    this->m_Window->draw(*this->m_ShowSpeed);
-}
+  void Update(sf::Time dt) {
+    // Get keyboard input:
+    bool sprinting = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
+    sf::Vector2f direction(
+      sf::Keyboard::isKeyPressed(sf::Keyboard::D) - 
+      sf::Keyboard::isKeyPressed(sf::Keyboard::A), // X-axis (A/D)
+      sf::Keyboard::isKeyPressed(sf::Keyboard::S) - 
+      sf::Keyboard::isKeyPressed(sf::Keyboard::W)  // Y-axis (W/S)
+    );
 
+    // Normalize direction vector to prevent diagonal speed boost
+    float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+    if (length > 0) direction /= length;
 
+    player.UpdateMovementState(dt, sprinting, direction); // Update player
+  }
 
-/*
-    Game Loop that keeps game running.
-*/
-void Game::Update() {
-
-    this->DeltaTimeUpdate();
-
-    this->EventHandler();
-
-    this->m_Player.Update(m_DeltaTime);
-
-    m_ShowSpeed->setString(std::to_string(m_Player.GetSpeed()));
-
-    this->m_Window->clear();
-    this->Render();
-    this->m_Window->display();
-
-}
-
-
-
-/*
-    Start the first frame of the game.
-*/
-void Game::Run() {
-    while (this->m_Window->isOpen())
-        this->Update();
-}
+  void Render() {
+    window.clear(sf::Color(30, 30, 30)); // Dark gray background
+    player.Draw(window);                 // Draw player
+    window.display();                    // Show rendered frame
+  }
+};
