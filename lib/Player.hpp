@@ -3,10 +3,17 @@
 
 #include "Entity.hpp"
 
-class Player : private Entity {
+class Player : private Entity
+{
 private:
 
 	/*
+		Hey don't uncomment this,
+		it just a referece to tell that
+		these member data and methods
+		exist inside the Entity class and was inherited here!
+
+
 		std::string		m_Name;
 		uint16_t		m_CurrentHealth;
 		const uint16_t	m_MaxHealth;
@@ -16,11 +23,12 @@ private:
 
 	sf::RectangleShape m_Character;
 
+	const float m_Acceleration;
+
 	float m_WalkingVelocity;
 	float m_RunningVelocity;
-	const float m_Acceleration;
-	float m_CurrentXVelocity;
-	float m_CurrentYVelocity;
+	sf::Vector2f m_CurrentVelocity;
+	
 	uint16_t m_Stamina;
 
 public:
@@ -45,10 +53,8 @@ public:
 	*/
 	void Update(const float& dt) override;
 
-	//void Idle() override;
-	//void Walk() override;
-	//void Run() override;
-	//void Die() override;
+	void VelocityUpdate();
+	void Movements(const float& dt) override;
 
 	const float& GetSpeed() const;
 

@@ -10,7 +10,8 @@
 // SFML
 #include <SFML/Graphics.hpp>
 
-class Entity {
+class Entity
+{
 protected:
 	std::string		m_Name;
 	uint16_t		m_CurrentHealth;
@@ -19,6 +20,8 @@ protected:
 	Entity(std::string name);
 
 	virtual void Update(const float& dt) = 0;
+
+	virtual void Movements(const float& dt) = 0;
 
 	//virtual void Idle() = 0;
 	//virtual void Walk() = 0;

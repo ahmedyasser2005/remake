@@ -3,7 +3,8 @@
 
 #include "Player.hpp"
 
-class Game {
+class Game
+{
 private:
 	
 	sf::RenderWindow* m_Window;
